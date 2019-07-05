@@ -2,7 +2,7 @@
 layout:     post
 title:      "数学角度看支持向量机"
 date:       2015-01-29 12:00:00
-author:     "Hux"
+author:     "Yi"
 header-img: "img/post-bg-2015.jpg"
 catalog: true
 tags:
