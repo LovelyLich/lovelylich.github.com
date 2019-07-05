@@ -10,9 +10,10 @@ tags:
     - 生活
     - Meta
 ---
+
 ## 点到超平面的距离计算
 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
-### 欧式空间中两点之间的距离
+## 欧式空间中两点之间的距离
 在欧几里得空间中，点 **p** =$(p_1, p_2,\ldots, p_n)$和 **q** =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
 $$
 \begin{aligned}
@@ -22,18 +23,18 @@ d({\bf{p}},{\bf{q}})&=\sqrt{(p_1-q_1)^2+(p_2-q_2)^2+\cdots+(p_n-q_n)^2}\\
 $$
 由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
 $$
-\lVert\bold{p}\rVert=\sqrt{p_1^2+p_2^2+\cdots+p_n^2}
+\lVert{\bf{p}}\rVert=\sqrt{p_1^2+p_2^2+\cdots+p_n^2}
 $$
-### 欧式空间中点到超平面的距离
+## 欧式空间中点到超平面的距离
 平面的一般方程式为：
-```math
+$$
 Ax+By+Cz+D=0
-```
+$$
 其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点）
 所以，对于计算任意点**P**=(x<sub>1</sub>, y<sub>1</sub>,z<sub>1</sub>)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
-```math
+$$
 d=\frac {\lvert Ax_1+By_1+Cz_1+D \rvert} {\sqrt{A^2+B^2+C^2}}
-```
+$$
 ## 支持向量机的训练目标
 所以，支持向量机是为了寻找某个超平面 Ax+By+Cz+D=0，使得所有点到该平面的距离最大。
 
@@ -56,9 +57,9 @@ $f(tx+(1-t)y) \leq tf(x)+(1-t)f(y)$
 具体地，凸函数如下图所示：
 ![e9305e9de336aaad4b5dbfedbc94852f.png](evernotecid://44655833-19D4-41FA-93A2-27C4B398EE7D/appyinxiangcom/9784999/ENResource/p20)
 定义比较抽象，但如果设$t=\frac 1 2$，则能推导出我们熟悉的凸函数定义:
-```math
+$$
 f(\frac {x+y} 2) \leq \frac {f(x)+f(y)} 2
-```
+$$
 ## 凸优化
 引用自维基百科:
 >令$\mathcal{X}\subset \mathbb{R^n}$为一凸集，且$f:\mathcal {X}\to \mathbb {R}$为一凸函数。凸优化就是要找出一点$x^{\ast}\in {\mathcal {X}}$，使得每一$x\in {\mathcal {X}}$满足$f(x^{\ast })\leq f(x)$称为全局最优值，或全域最佳解。
@@ -72,13 +73,15 @@ f(\frac {x+y} 2) \leq \frac {f(x)+f(y)} 2
 ### 不等式约束优化
 ### SVM 中的约束优化
 SVM的求解最佳超平面问题，最终化为求解该约束优化问题：
-```math
+$$
 \begin{aligned}
 & &&\min_{w,b}\frac{1}{2}{\left \| w \right \|}^2\\
 &\text{s.t.} &&y_i(w^Tx_i+b)\geqslant1, i=1,2,\cdots,m
 \end{aligned}
-```
-该问题是凸二次规划问题
+$$
+
+所以, 该问题是凸二次规划问题
+
 这是针对通常凸二次规划的解法，我们也可以使用拉格朗日乘子解决最小值
 ### 拉格朗日乘子
 
