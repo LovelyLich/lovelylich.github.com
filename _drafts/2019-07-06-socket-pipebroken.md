@@ -25,7 +25,7 @@ tags:
 ### 测试验证
 
 #### 验证coredump情况
-##### 测试
+##### 测试 1 
 为验证coredump，我们需要手工构造异常，我是用除0异常来让程序直接崩溃退出。客户端代码逻辑就是建立连接，接收数据，并且直接coredump。
 
 代码如下:
@@ -155,7 +155,35 @@ int main(int argc, char *argv[]) {
 15:15:48.839470 IP 10.10.121.102.5000 > 10.10.121.101.42642: Flags [P.], seq 27:53, ack 2, win 227, options [nop,nop,TS val 285605862 ecr 285610701], length 26
 15:15:48.839603 IP 10.10.121.101.42642 > 10.10.121.102.5000: Flags [R], seq 1555385682, win 0, length 0
 ```
-可以看到客户端在coredump时，会由客户端操作系统立即向服务器发送FIN.ACK包。这是由内核哪部分代码实现的呢？
+可以看到客户端在coredump时，会由客户端操作系统立即向服务器发送FIN.ACK包。
+另外，在服务器可以看到，send()调用是成功返回：
+
+```
+root@u102:~# ./server
+got connected socket
+have sent data to client, waiting for client coredump..
+send data to coredumped socket...
+send returned 26, err: Success
+```
+另外，如果将此处send()改成recv()，则结果是：
+
+```
+root@u102:~# ./server
+got connected socket
+have sent data to client, waiting for client coredump..
+recv() on coredumped socket, returned : 0, err:Success
+```
+##### 测试1结论
+综上：客户端coredump后，会由客户端操作系统立即向服务器发送FIN.ACK包。该行为对于服务器而言，是正常的连接单方断开行为。所以，这并不影响服务器向客户端发送数据，此时send()调用返回成功。而如果此时recv()，同样也是正常的，服务器仅通过recv返回0，知悉客户端断开了连接，并不关心如何断开的。
+总而言之，服务器此时仅知道，客户端响应了FIN.ACK包。
+
+##### 测试 2
+前面是客户客户端接收数据后coredump，假设coredump时套接字缓冲区有未接收数据呢？比如我们在客户端调用recv()之前就coredump。下面是抓包结果：
+
+```
+
+```
+这是由内核哪部分代码实现的呢？答案是tcp_close()。
 
 ##### 溯源寻根
 
