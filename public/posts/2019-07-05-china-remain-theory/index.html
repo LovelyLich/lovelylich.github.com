@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>榕易的易  | 中国剩余定理</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.56.3" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="中国剩余定理" />
+<meta property="og:description" content="1. 简介（内容摘自维基百科） 中国剩余定理给出了以下一元线性同余方程组：
+$$ (S) : \begin{cases} x \equiv a_1 &amp; (\text{mod }m_1) x \equiv a_2 &amp; (\text{mod }m_2) &amp; \vdots x \equiv a_n &amp; (\text{mod }m_n) \end{cases} $$
+有解的判定条件，并用构造法给出了在有解情况下解的具体形式。 中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：
+ 设$M=m_1 \times m_2 \times \ldots \times mn=\displaystyle\prod{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积 设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$ 方程组(S)的通解形式为:  $$ x=a_1t_1M_1&#43;a_2t_2M_2&#43;\ldots&#43;a_nt_nM_n&#43;kM $$
+2. 解释 以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。
+3. 求模的逆元 同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:
+$$ t_iM_i \equiv 1 (\text{mod } m_i) $$ 的$t_i$。
+另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix &#43; m_iy = g$, $g$为$M_i,m_i$的最大公约数。 由于:$M_ix &#43; m_iy = 1$,两边同时取模$m_i$得" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.lovelylich.top/posts/2019-07-05-china-remain-theory/" />
+<meta property="article:published_time" content="2019-07-05T15:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-05T15:00:00+00:00" />
+<meta itemprop="name" content="中国剩余定理">
+<meta itemprop="description" content="1. 简介（内容摘自维基百科） 中国剩余定理给出了以下一元线性同余方程组：
+$$ (S) : \begin{cases} x \equiv a_1 &amp; (\text{mod }m_1) x \equiv a_2 &amp; (\text{mod }m_2) &amp; \vdots x \equiv a_n &amp; (\text{mod }m_n) \end{cases} $$
+有解的判定条件，并用构造法给出了在有解情况下解的具体形式。 中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：
+ 设$M=m_1 \times m_2 \times \ldots \times mn=\displaystyle\prod{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积 设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$ 方程组(S)的通解形式为:  $$ x=a_1t_1M_1&#43;a_2t_2M_2&#43;\ldots&#43;a_nt_nM_n&#43;kM $$
+2. 解释 以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。
+3. 求模的逆元 同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:
+$$ t_iM_i \equiv 1 (\text{mod } m_i) $$ 的$t_i$。
+另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix &#43; m_iy = g$, $g$为$M_i,m_i$的最大公约数。 由于:$M_ix &#43; m_iy = 1$,两边同时取模$m_i$得">
+
+
+<meta itemprop="datePublished" content="2019-07-05T15:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-05T15:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="491">
+
+
+
+<meta itemprop="keywords" content="算法," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="中国剩余定理"/>
+<meta name="twitter:description" content="1. 简介（内容摘自维基百科） 中国剩余定理给出了以下一元线性同余方程组：
+$$ (S) : \begin{cases} x \equiv a_1 &amp; (\text{mod }m_1) x \equiv a_2 &amp; (\text{mod }m_2) &amp; \vdots x \equiv a_n &amp; (\text{mod }m_n) \end{cases} $$
+有解的判定条件，并用构造法给出了在有解情况下解的具体形式。 中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：
+ 设$M=m_1 \times m_2 \times \ldots \times mn=\displaystyle\prod{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积 设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$ 方程组(S)的通解形式为:  $$ x=a_1t_1M_1&#43;a_2t_2M_2&#43;\ldots&#43;a_nt_nM_n&#43;kM $$
+2. 解释 以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。
+3. 求模的逆元 同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:
+$$ t_iM_i \equiv 1 (\text{mod } m_i) $$ 的$t_i$。
+另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix &#43; m_iy = g$, $g$为$M_i,m_i$的最大公约数。 由于:$M_ix &#43; m_iy = 1$,两边同时取模$m_i$得"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://www.lovelylich.top/" class="f3 fw2 hover-white no-underline white-90 dib">
+      榕易的易
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">中国剩余定理</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2019-07-05T15:00:00Z">July 5, 2019</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+<h3 id="1-简介-内容摘自维基百科">1. 简介（内容摘自维基百科）</h3>
+
+<p>中国剩余定理给出了以下一元线性同余方程组：</p>
+
+<p>$$
+(S) : \begin{cases}
+   x \equiv a_1 &amp; (\text{mod }m_1) <br />
+   x \equiv a_2 &amp; (\text{mod }m_2) <br />
+   &amp; \vdots <br />
+   x \equiv a_n &amp; (\text{mod }m_n)
+\end{cases}
+$$</p>
+
+<p>有解的判定条件，并用构造法给出了在有解情况下解的具体形式。
+中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：</p>
+
+<ol>
+<li>设$M=m_1 \times m_2 \times \ldots \times m<em>n=\displaystyle\prod</em>{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积</li>
+<li>设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$</li>
+<li>方程组(S)的通解形式为:</li>
+</ol>
+
+<p>$$
+x=a_1t_1M_1+a_2t_2M_2+\ldots+a_nt_nM_n+kM
+$$</p>
+
+<h3 id="2-解释">2. 解释</h3>
+
+<p>以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。</p>
+
+<h3 id="3-求模的逆元">3. 求模的逆元</h3>
+
+<p>同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:</p>
+
+<p>$$
+t_iM_i \equiv 1 (\text{mod } m_i)
+$$
+的$t_i$。</p>
+
+<p>另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix + m_iy = g$, $g$为$M_i,m_i$的最大公约数。
+由于:$M_ix + m_iy = 1$,两边同时取模$m_i$得</p>
+
+<p>$$
+\begin{aligned}
+(M_ix+m_iy)\%m_i&amp;=1 <br />
+(M_ix)\%m_i&amp;=1
+\end{aligned}
+$$</p>
+
+<p>根据模逆元的定义，所以x即为$M_i$模$m_i$的逆元。
+而x可以通过扩展欧几里德递归调用得到。
+另注意：扩展欧几里德得到的x是$M_i$模$m_i$的其中一个逆元，为取最小正整数逆元，取 $x \text{ mod } n$ 即可。</p>
+
+<h3 id="4-扩展欧几里德算法">4. 扩展欧几里德算法</h3>
+
+<p>定义: 扩展欧几里德算法对于任意的$a \ge b \ge 0$,能够计算出$x,y,d$，使得$ax+by=d=gcd(a,b)$</p>
+
+<p>算法实现：</p>
+
+<pre><code class="language-python">function exgcd(a, b)
+Input: Two positive integers a and b with a&gt;=b&gt;=0
+Output: Integers x, y, d such taht d=gcd(a,b) and ax+by=d
+if b=0: return (1, 0, a)
+(x1, y1, d) = exgcd(b, a%b)
+return (y1, x1-floor(a/b)y, d)
+</code></pre>
+
+<p>所以对于$M_i$模$m_i$的逆元可通过调用exgcd($M_i, m_i$)返回的x得到</p>
+
+<h3 id="5-poj例题-problem1006-biorhythms">5. POJ例题：Problem1006 Biorhythms</h3>
+
+<p><strong>解析：</strong>设对于某个case输入 $p,i,e$ 给出三个达到顶峰时的时间，并且从 $d$ 开始，经过 $x$ 天后，三者同时达到顶峰，则有方程：</p>
+
+<p>$$
+\begin{cases}
+   p+23m_1 &amp;= d+x <br />
+   i+28m_2 &amp;= d+x <br />
+   e+33m_3 &amp;= d+x
+\end{cases}
+$$</p>
+
+<p>所以对于每个case，即为给出了$p, i, e, d$,欲求x的值。两边同时$mod  \ m_i$即可转化为同余方程组形式，同时设$y=d+x$, 即为：</p>
+
+<p>$$
+\begin{cases}
+   y \equiv p &amp; (mod\ 23) <br />
+   y \equiv i &amp; (mod\ 28) <br />
+   y \equiv e &amp; (mod\ 33)
+\end{cases}
+$$</p>
+
+<p>所以，根据中国剩余定理即可解出。</p>
+
+<p><strong>实现代码:</strong></p>
+
+<pre><code class="language-c++">//
+//  main.cpp
+//  Problem1006
+//
+
+#include &lt;iostream&gt;
+#include &lt;math.h&gt;
+using namespace std;
+
+//扩展欧几里德公式
+void exgcd(long long a,long long b, long long *x, long long *y, long long *d) {
+    cout &lt;&lt; &quot;start compute: &quot; &lt;&lt; &quot;a=&quot; &lt;&lt; a &lt;&lt;&quot; b=&quot; &lt;&lt; b &lt;&lt; &quot; x=&quot; &lt;&lt; *x &lt;&lt; &quot; y=&quot; &lt;&lt; *y &lt;&lt; &quot; d=&quot; &lt;&lt; *d &lt;&lt;  endl;
+    if (b==0)
+    {
+        *x=1;
+        *y=0;
+        *d = a;
+        return;
+    } else {
+        exgcd(b, a%b, x, y, d);
+        long long t=*y;
+        *y = *x - floor(a/b) * (*y);
+        *x = t;
+        cout &lt;&lt; &quot;inverse multipler of &quot; &lt;&lt; b &lt;&lt; &quot;mod &quot;&lt;&lt; a%b &lt;&lt; &quot; is: &quot; &lt;&lt; *x &lt;&lt; &quot; y=&quot; &lt;&lt; *y&lt;&lt; &quot; d=&quot; &lt;&lt; *d &lt;&lt;  endl;
+    }
+}
+// 中国剩余定理
+long long crt(int n, long long *a, long long *m){
+    long long M=1;
+    long long ret=0;
+    //计算最小公倍数
+    cout &lt;&lt; &quot;a[0]=&quot;&lt;&lt; a[0] &lt;&lt; &quot;m[0]=&quot; &lt;&lt; m[0] &lt;&lt; endl;
+    cout &lt;&lt; &quot;a[1]=&quot;&lt;&lt; a[1] &lt;&lt; &quot;m[1]=&quot; &lt;&lt; m[1] &lt;&lt; endl;
+    cout &lt;&lt; &quot;a[2]=&quot;&lt;&lt; a[2] &lt;&lt; &quot;m[2]=&quot; &lt;&lt; m[2] &lt;&lt; endl;
+    for (int i=0;i&lt;n;i++) {
+        M*=m[i];
+        cout &lt;&lt; &quot;M=&quot;&lt;&lt; M &lt;&lt; endl;
+    }
+    
+    //利用通解求结果
+    for (int i=0;i&lt;n;i++) {
+        //计算M_i的逆元
+        long long x, y, d;
+        long long M_i=M/m[i];
+        exgcd(M_i,m[i], &amp;x, &amp;y, &amp;d);
+        cout &lt;&lt; &quot;i=&quot;&lt;&lt;i &lt;&lt; &quot; M_i=&quot; &lt;&lt; M_i &lt;&lt;  &quot; m[i]=&quot; &lt;&lt; m[i] &lt;&lt; &quot; x=&quot; &lt;&lt; x &lt;&lt; endl;
+        //x是M_i%m[i]意义下的逆元
+        ret+=M_i*x*a[i];
+        ret%=M;
+    }
+    return ret;
+}
+
+int main(int argc, const char * argv[]) {
+    long long m[3] = {23, 28,33};
+    long long a[3] = {0};
+    long long d;
+    int i = 0;
+    while(true) {
+        i++;
+        cin&gt;&gt;a[0]&gt;&gt;a[1]&gt;&gt;a[2]&gt;&gt;d;
+        if (a[0]==a[1] &amp;&amp; a[1]==a[2] &amp;&amp; a[2]==d &amp;&amp; d==-1)
+            break;
+        long long ret = crt(3, a, m);
+        cout &lt;&lt; &quot;Case &quot;&lt;&lt; i &lt;&lt; &quot;: the next triple peak occurs in &quot; &lt;&lt; ret &lt;&lt; &quot; days.&quot; &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/tags/%E7%AE%97%E6%B3%95" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">算法</a>
+   </li>
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://www.lovelylich.top/" >
+    &copy; 2019 榕易的易
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>榕易的易  | 数学角度看支持向量机</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.56.3" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="数学角度看支持向量机" />
+<meta property="og:description" content="点到超平面的距离计算 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
+欧式空间中两点之间的距离 在欧几里得空间中，点 p =$(p_1, p_2,\ldots, p_n)$和 q =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
+$$ \begin{aligned} d({\bf{p}},{\bf{q}})&amp;=\sqrt{(p_1-q_1)^2&#43;(p_2-q_2)^2&#43;\cdots&#43;(p_n-qn)^2}
+&amp;=\sqrt{\sum{i=1}^n(p_i-q_i)^2} \end{aligned} $$
+由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
+$$ \lVert{\bf{p}}\rVert=\sqrt{p_1^2&#43;p_2^2&#43;\cdots&#43;p_n^2} $$
+欧式空间中点到超平面的距离 平面的一般方程式为：
+$$ Ax&#43;By&#43;Cz&#43;D=0 $$
+其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点） 所以，对于计算任意点P=(x1, y1,z1)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
+$$ d=\frac {\lvert Ax_1&#43;By_1&#43;Cz_1&#43;D \rvert} {\sqrt{A^2&#43;B^2&#43;C^2}} $$
+支持向量机的训练目标 所以，支持向量机是为了寻找某个超平面 Ax&#43;By&#43;Cz&#43;D=0，使得所有点到该平面的距离最大。
+凸集 引用自维基百科: &gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中
+凸集和非凸集合的几何表现：
+   凸集 非凸集          凸函数定义 引用自维基百科定义: &gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有: $f(tx&#43;(1-t)y) \leq tf(x)&#43;(1-t)f(y)$ 也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.lovelylich.top/posts/2018-12-29-math_thesis_of_svm/" />
+<meta property="article:published_time" content="2018-12-29T12:00:00+00:00" />
+<meta property="article:modified_time" content="2018-12-29T12:00:00+00:00" />
+<meta itemprop="name" content="数学角度看支持向量机">
+<meta itemprop="description" content="点到超平面的距离计算 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
+欧式空间中两点之间的距离 在欧几里得空间中，点 p =$(p_1, p_2,\ldots, p_n)$和 q =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
+$$ \begin{aligned} d({\bf{p}},{\bf{q}})&amp;=\sqrt{(p_1-q_1)^2&#43;(p_2-q_2)^2&#43;\cdots&#43;(p_n-qn)^2}
+&amp;=\sqrt{\sum{i=1}^n(p_i-q_i)^2} \end{aligned} $$
+由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
+$$ \lVert{\bf{p}}\rVert=\sqrt{p_1^2&#43;p_2^2&#43;\cdots&#43;p_n^2} $$
+欧式空间中点到超平面的距离 平面的一般方程式为：
+$$ Ax&#43;By&#43;Cz&#43;D=0 $$
+其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点） 所以，对于计算任意点P=(x1, y1,z1)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
+$$ d=\frac {\lvert Ax_1&#43;By_1&#43;Cz_1&#43;D \rvert} {\sqrt{A^2&#43;B^2&#43;C^2}} $$
+支持向量机的训练目标 所以，支持向量机是为了寻找某个超平面 Ax&#43;By&#43;Cz&#43;D=0，使得所有点到该平面的距离最大。
+凸集 引用自维基百科: &gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中
+凸集和非凸集合的几何表现：
+   凸集 非凸集          凸函数定义 引用自维基百科定义: &gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有: $f(tx&#43;(1-t)y) \leq tf(x)&#43;(1-t)f(y)$ 也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。">
+
+
+<meta itemprop="datePublished" content="2018-12-29T12:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-12-29T12:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="126">
+
+
+
+<meta itemprop="keywords" content="机器学习," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="数学角度看支持向量机"/>
+<meta name="twitter:description" content="点到超平面的距离计算 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
+欧式空间中两点之间的距离 在欧几里得空间中，点 p =$(p_1, p_2,\ldots, p_n)$和 q =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
+$$ \begin{aligned} d({\bf{p}},{\bf{q}})&amp;=\sqrt{(p_1-q_1)^2&#43;(p_2-q_2)^2&#43;\cdots&#43;(p_n-qn)^2}
+&amp;=\sqrt{\sum{i=1}^n(p_i-q_i)^2} \end{aligned} $$
+由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
+$$ \lVert{\bf{p}}\rVert=\sqrt{p_1^2&#43;p_2^2&#43;\cdots&#43;p_n^2} $$
+欧式空间中点到超平面的距离 平面的一般方程式为：
+$$ Ax&#43;By&#43;Cz&#43;D=0 $$
+其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点） 所以，对于计算任意点P=(x1, y1,z1)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
+$$ d=\frac {\lvert Ax_1&#43;By_1&#43;Cz_1&#43;D \rvert} {\sqrt{A^2&#43;B^2&#43;C^2}} $$
+支持向量机的训练目标 所以，支持向量机是为了寻找某个超平面 Ax&#43;By&#43;Cz&#43;D=0，使得所有点到该平面的距离最大。
+凸集 引用自维基百科: &gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中
+凸集和非凸集合的几何表现：
+   凸集 非凸集          凸函数定义 引用自维基百科定义: &gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有: $f(tx&#43;(1-t)y) \leq tf(x)&#43;(1-t)f(y)$ 也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://www.lovelylich.top/" class="f3 fw2 hover-white no-underline white-90 dib">
+      榕易的易
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">数学角度看支持向量机</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-12-29T12:00:00Z">December 29, 2018</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+<h2 id="点到超平面的距离计算">点到超平面的距离计算</h2>
+
+<p>SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。</p>
+
+<h2 id="欧式空间中两点之间的距离">欧式空间中两点之间的距离</h2>
+
+<p>在欧几里得空间中，点 <strong>p</strong> =$(p_1, p_2,\ldots, p_n)$和 <strong>q</strong> =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:</p>
+
+<p>$$
+\begin{aligned}
+d({\bf{p}},{\bf{q}})&amp;=\sqrt{(p_1-q_1)^2+(p_2-q_2)^2+\cdots+(p_n-q<em>n)^2}<br />
+                  &amp;=\sqrt{\sum</em>{i=1}^n(p_i-q_i)^2}
+\end{aligned}
+$$</p>
+
+<p>由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：</p>
+
+<p>$$
+\lVert{\bf{p}}\rVert=\sqrt{p_1^2+p_2^2+\cdots+p_n^2}
+$$</p>
+
+<h2 id="欧式空间中点到超平面的距离">欧式空间中点到超平面的距离</h2>
+
+<p>平面的一般方程式为：</p>
+
+<p>$$
+Ax+By+Cz+D=0
+$$</p>
+
+<p>其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点）
+所以，对于计算任意点<strong>P</strong>=(x<sub>1</sub>, y<sub>1</sub>,z<sub>1</sub>)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:</p>
+
+<p>$$
+d=\frac {\lvert Ax_1+By_1+Cz_1+D \rvert} {\sqrt{A^2+B^2+C^2}}
+$$</p>
+
+<h2 id="支持向量机的训练目标">支持向量机的训练目标</h2>
+
+<p>所以，支持向量机是为了寻找某个超平面 Ax+By+Cz+D=0，使得所有点到该平面的距离最大。</p>
+
+<h3 id="凸集">凸集</h3>
+
+<p>引用自维基百科:
+&gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中</p>
+
+<p>凸集和非凸集合的几何表现：</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">凸集</th>
+<th align="center">非凸集</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center"><img src="/img/in-post/post_convex_img.png" alt="post_convex_img.png" /></td>
+<td align="center"><img src="/img/in-post/post_non_convex.png" alt="post_non_convex.png" /></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="凸函数定义">凸函数定义</h2>
+
+<p>引用自维基百科定义:
+&gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有:
+$f(tx+(1-t)y) \leq tf(x)+(1-t)f(y)$
+也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。</p>
+
+<p>具体地，凸函数如下图所示：</p>
+
+<p><img src="/img/in-post/post_convex_function.png" alt="post_convex_function.png" /></p>
+
+<p>定义比较抽象，但如果设$t=\frac 1 2$，则能推导出我们熟悉的凸函数定义:</p>
+
+<p>$$
+f(\frac {x+y} 2) \leq \frac {f(x)+f(y)} 2
+$$</p>
+
+<h2 id="凸优化">凸优化</h2>
+
+<p>引用自维基百科:
+&gt;令$\mathcal{X}\subset \mathbb{R^n}$为一凸集，且$f:\mathcal {X}\to \mathbb {R}$为一凸函数。凸优化就是要找出一点$x^{\ast}\in {\mathcal {X}}$，使得每一$x\in {\mathcal {X}}$满足$f(x^{\ast })\leq f(x)$称为全局最优值，或全域最佳解。
+&gt;或者可以表示为下面的标准型：
+&gt;min f(x)
+&gt;subject to $g<em>{i}(x) \leq 0, i=1,2,\ldots,m$
+&gt;其中$f,g</em>{1}\ldots g_{m}:\mathbb {R} ^{n}\rightarrow \mathbb {R}$为凸函数</p>
+
+<h3 id="无约束优化">无约束优化</h3>
+
+<h3 id="等式约束优化">等式约束优化</h3>
+
+<h3 id="不等式约束优化">不等式约束优化</h3>
+
+<h3 id="svm-中的约束优化">SVM 中的约束优化</h3>
+
+<p>SVM的求解最佳超平面问题，最终化为求解该约束优化问题：</p>
+
+<p>$$
+\begin{aligned}
+&amp; &amp;&amp;\min_{w,b}\frac{1}{2}{\left | w \right |}^2<br />
+&amp;\text{s.t.} &amp;&amp;y_i(w^Tx_i+b)\geqslant1, i=1,2,\cdots,m
+\end{aligned}
+$$</p>
+
+<p>所以, 该问题是凸二次规划问题</p>
+
+<p>这是针对通常凸二次规划的解法，我们也可以使用拉格朗日乘子解决最小值</p>
+
+<h3 id="拉格朗日乘子">拉格朗日乘子</h3>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">机器学习</a>
+   </li>
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://www.lovelylich.top/" >
+    &copy; 2019 榕易的易
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

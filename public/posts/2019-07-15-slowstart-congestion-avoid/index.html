@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>榕易的易  | TCP的慢启动、拥塞避免、快速恢复和快速重传--概述</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.56.3" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="TCP的慢启动、拥塞避免、快速恢复和快速重传--概述" />
+<meta property="og:description" content=" 慢启动 TCP 三次握手后，所有新建的连接都需要以极快速度逐步探测可用带宽，尽快达到带宽瓶颈点，但同时又不能直接一次性发太多数据包，避免造成网络拥堵。目前Linux内核所有新建的连接，都会以慢启动来增大拥塞窗口。慢启动算法是：TCP建连成功后，首先直接向对端发送初始拥塞窗口个数的数据包，此后，每收到一个ACK拥塞窗口&#43;1。所以在没有丢包的情况下，经过第一个RTT后，此前发送的所有N个数据包都已经ACK掉，新窗口即为N&#43;N=2N，以此类推。 另外，考虑到目前整体网络带宽已经大幅提高，故Linux 最新内核以10作为初始窗口：
+/* TCP initial congestion window as per rfc6928 */ #define TCP_INIT_CWND10  所以目前Linux目前的慢启动算法实现是：
+开始 &mdash;&gt; cwnd=10 经过1个RTT后 &mdash;&gt; cwnd=2*10=20 经过2个RTT后 &mdash;&gt; cwnd=2*20=40 经过3个RTT后 &mdash;&gt; cwnd=2*40=80 经过N个RTT后 &mdash;&gt; cwnd=(2^N)*10
+假设带宽为W，则经过$\log_2\frac W {10}$个RTT后，到达带宽瓶颈点。
+拥塞避免 TCP 并不会让慢启动算法无休止持续增长，而是会设定一个慢启动阈值，当cwnd窗口超过这个阈值时，会进入拥塞避免算法阶段。 拥塞避免算法是在当前拥塞窗口cwnd内，对于每个收到的ACK，拥塞窗口增加$\frac{1}{cwnd}$，从而当整个cwnd窗口的数据包都收到ACK时，拥塞窗口变为cwnd&#43;1，也就是相比于慢启动每个RTT拥塞窗口翻倍，在拥塞避免阶段，每个RTT拥塞窗口只增加1，实现缓慢增长逐步试探带宽瓶颈点。 目前Linux 内核的慢启动阈值默认为：
+#define TCP_INFINITE_SSTHRESH0x7fffffff  " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.lovelylich.top/posts/2019-07-15-slowstart-congestion-avoid/" />
+<meta property="article:published_time" content="2019-07-15T12:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-15T12:00:00+00:00" />
+<meta itemprop="name" content="TCP的慢启动、拥塞避免、快速恢复和快速重传--概述">
+<meta itemprop="description" content=" 慢启动 TCP 三次握手后，所有新建的连接都需要以极快速度逐步探测可用带宽，尽快达到带宽瓶颈点，但同时又不能直接一次性发太多数据包，避免造成网络拥堵。目前Linux内核所有新建的连接，都会以慢启动来增大拥塞窗口。慢启动算法是：TCP建连成功后，首先直接向对端发送初始拥塞窗口个数的数据包，此后，每收到一个ACK拥塞窗口&#43;1。所以在没有丢包的情况下，经过第一个RTT后，此前发送的所有N个数据包都已经ACK掉，新窗口即为N&#43;N=2N，以此类推。 另外，考虑到目前整体网络带宽已经大幅提高，故Linux 最新内核以10作为初始窗口：
+/* TCP initial congestion window as per rfc6928 */ #define TCP_INIT_CWND10  所以目前Linux目前的慢启动算法实现是：
+开始 &mdash;&gt; cwnd=10 经过1个RTT后 &mdash;&gt; cwnd=2*10=20 经过2个RTT后 &mdash;&gt; cwnd=2*20=40 经过3个RTT后 &mdash;&gt; cwnd=2*40=80 经过N个RTT后 &mdash;&gt; cwnd=(2^N)*10
+假设带宽为W，则经过$\log_2\frac W {10}$个RTT后，到达带宽瓶颈点。
+拥塞避免 TCP 并不会让慢启动算法无休止持续增长，而是会设定一个慢启动阈值，当cwnd窗口超过这个阈值时，会进入拥塞避免算法阶段。 拥塞避免算法是在当前拥塞窗口cwnd内，对于每个收到的ACK，拥塞窗口增加$\frac{1}{cwnd}$，从而当整个cwnd窗口的数据包都收到ACK时，拥塞窗口变为cwnd&#43;1，也就是相比于慢启动每个RTT拥塞窗口翻倍，在拥塞避免阶段，每个RTT拥塞窗口只增加1，实现缓慢增长逐步试探带宽瓶颈点。 目前Linux 内核的慢启动阈值默认为：
+#define TCP_INFINITE_SSTHRESH0x7fffffff  ">
+
+
+<meta itemprop="datePublished" content="2019-07-15T12:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-07-15T12:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="43">
+
+
+
+<meta itemprop="keywords" content="TCP 协议," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TCP的慢启动、拥塞避免、快速恢复和快速重传--概述"/>
+<meta name="twitter:description" content=" 慢启动 TCP 三次握手后，所有新建的连接都需要以极快速度逐步探测可用带宽，尽快达到带宽瓶颈点，但同时又不能直接一次性发太多数据包，避免造成网络拥堵。目前Linux内核所有新建的连接，都会以慢启动来增大拥塞窗口。慢启动算法是：TCP建连成功后，首先直接向对端发送初始拥塞窗口个数的数据包，此后，每收到一个ACK拥塞窗口&#43;1。所以在没有丢包的情况下，经过第一个RTT后，此前发送的所有N个数据包都已经ACK掉，新窗口即为N&#43;N=2N，以此类推。 另外，考虑到目前整体网络带宽已经大幅提高，故Linux 最新内核以10作为初始窗口：
+/* TCP initial congestion window as per rfc6928 */ #define TCP_INIT_CWND10  所以目前Linux目前的慢启动算法实现是：
+开始 &mdash;&gt; cwnd=10 经过1个RTT后 &mdash;&gt; cwnd=2*10=20 经过2个RTT后 &mdash;&gt; cwnd=2*20=40 经过3个RTT后 &mdash;&gt; cwnd=2*40=80 经过N个RTT后 &mdash;&gt; cwnd=(2^N)*10
+假设带宽为W，则经过$\log_2\frac W {10}$个RTT后，到达带宽瓶颈点。
+拥塞避免 TCP 并不会让慢启动算法无休止持续增长，而是会设定一个慢启动阈值，当cwnd窗口超过这个阈值时，会进入拥塞避免算法阶段。 拥塞避免算法是在当前拥塞窗口cwnd内，对于每个收到的ACK，拥塞窗口增加$\frac{1}{cwnd}$，从而当整个cwnd窗口的数据包都收到ACK时，拥塞窗口变为cwnd&#43;1，也就是相比于慢启动每个RTT拥塞窗口翻倍，在拥塞避免阶段，每个RTT拥塞窗口只增加1，实现缓慢增长逐步试探带宽瓶颈点。 目前Linux 内核的慢启动阈值默认为：
+#define TCP_INFINITE_SSTHRESH0x7fffffff  "/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://www.lovelylich.top/" class="f3 fw2 hover-white no-underline white-90 dib">
+      榕易的易
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">TCP的慢启动、拥塞避免、快速恢复和快速重传--概述</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2019-07-15T12:00:00Z">July 15, 2019</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+<h3 id="慢启动">慢启动</h3>
+
+<p>TCP 三次握手后，所有新建的连接都需要以极快速度逐步探测可用带宽，尽快达到带宽瓶颈点，但同时又不能直接一次性发太多数据包，避免造成网络拥堵。目前Linux内核所有新建的连接，都会以慢启动来增大拥塞窗口。慢启动算法是：TCP建连成功后，首先直接向对端发送初始拥塞窗口个数的数据包，此后，每收到一个ACK拥塞窗口+1。所以在没有丢包的情况下，经过第一个RTT后，此前发送的所有N个数据包都已经ACK掉，新窗口即为N+N=2N，以此类推。
+另外，考虑到目前整体网络带宽已经大幅提高，故Linux 最新内核以10作为初始窗口：</p>
+
+<pre><code class="language-c">/* TCP initial congestion window as per rfc6928 */
+#define TCP_INIT_CWND10
+</code></pre>
+
+<p>所以目前Linux目前的慢启动算法实现是：</p>
+
+<p>开始          &mdash;&gt;     cwnd=10
+经过1个RTT后   &mdash;&gt;     cwnd=2*10=20
+经过2个RTT后   &mdash;&gt;     cwnd=2*20=40
+经过3个RTT后   &mdash;&gt;     cwnd=2*40=80
+经过N个RTT后   &mdash;&gt;     cwnd=(2^N)*10</p>
+
+<p>假设带宽为W，则经过$\log_2\frac W {10}$个RTT后，到达带宽瓶颈点。</p>
+
+<h3 id="拥塞避免">拥塞避免</h3>
+
+<p>TCP 并不会让慢启动算法无休止持续增长，而是会设定一个慢启动阈值，当cwnd窗口超过这个阈值时，会进入拥塞避免算法阶段。
+拥塞避免算法是在当前拥塞窗口cwnd内，对于每个收到的ACK，拥塞窗口增加$\frac{1}{cwnd}$，从而当整个cwnd窗口的数据包都收到ACK时，拥塞窗口变为cwnd+1，也就是相比于慢启动每个RTT拥塞窗口翻倍，在拥塞避免阶段，每个RTT拥塞窗口只增加1，实现缓慢增长逐步试探带宽瓶颈点。
+目前Linux 内核的慢启动阈值默认为：</p>
+
+<pre><code class="language-c">#define TCP_INFINITE_SSTHRESH0x7fffffff
+</code></pre>
+<ul class="pa0">
+  
+   <li class="list">
+     <a href="/tags/tcp-%E5%8D%8F%E8%AE%AE" class="link f5 grow no-underline br-pill ba ph3 pv2 mb2 dib black sans-serif">TCP 协议</a>
+   </li>
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+  <div class="bg-light-gray pa3 nested-list-reset nested-copy-line-height nested-links">
+    <p class="f5 b mb3">Related</p>
+    <ul class="pa0 list">
+	   
+	     <li  class="mb2">
+          <a href="/posts/2019-07-06-socket-pipebroken/">从套接字的Pipe Broken异常说起</a>
+        </li>
+	    
+	     <li  class="mb2">
+          <a href="/posts/2019-03-05-analysis-of-tcp-cork-and-nagle-algorithm/">浅谈TCP的Nagle算法与TCP_CORK</a>
+        </li>
+	    
+    </ul>
+</div>
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://www.lovelylich.top/" >
+    &copy; 2019 榕易的易
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

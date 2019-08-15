@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 榕易的易</title>
+    <link>http://www.lovelylich.top/posts/</link>
+    <description>Recent content in Posts on 榕易的易</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 15 Jul 2019 12:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.lovelylich.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>TCP的慢启动、拥塞避免、快速恢复和快速重传--概述</title>
+      <link>http://www.lovelylich.top/posts/2019-07-15-slowstart-congestion-avoid/</link>
+      <pubDate>Mon, 15 Jul 2019 12:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2019-07-15-slowstart-congestion-avoid/</guid>
+      <description> 慢启动 TCP 三次握手后，所有新建的连接都需要以极快速度逐步探测可用带宽，尽快达到带宽瓶颈点，但同时又不能直接一次性发太多数据包，避免造成网络拥堵。目前Linux内核所有新建的连接，都会以慢启动来增大拥塞窗口。慢启动算法是：TCP建连成功后，首先直接向对端发送初始拥塞窗口个数的数据包，此后，每收到一个ACK拥塞窗口+1。所以在没有丢包的情况下，经过第一个RTT后，此前发送的所有N个数据包都已经ACK掉，新窗口即为N+N=2N，以此类推。 另外，考虑到目前整体网络带宽已经大幅提高，故Linux 最新内核以10作为初始窗口：
+/* TCP initial congestion window as per rfc6928 */ #define TCP_INIT_CWND10  所以目前Linux目前的慢启动算法实现是：
+开始 &amp;mdash;&amp;gt; cwnd=10 经过1个RTT后 &amp;mdash;&amp;gt; cwnd=2*10=20 经过2个RTT后 &amp;mdash;&amp;gt; cwnd=2*20=40 经过3个RTT后 &amp;mdash;&amp;gt; cwnd=2*40=80 经过N个RTT后 &amp;mdash;&amp;gt; cwnd=(2^N)*10
+假设带宽为W，则经过$\log_2\frac W {10}$个RTT后，到达带宽瓶颈点。
+拥塞避免 TCP 并不会让慢启动算法无休止持续增长，而是会设定一个慢启动阈值，当cwnd窗口超过这个阈值时，会进入拥塞避免算法阶段。 拥塞避免算法是在当前拥塞窗口cwnd内，对于每个收到的ACK，拥塞窗口增加$\frac{1}{cwnd}$，从而当整个cwnd窗口的数据包都收到ACK时，拥塞窗口变为cwnd+1，也就是相比于慢启动每个RTT拥塞窗口翻倍，在拥塞避免阶段，每个RTT拥塞窗口只增加1，实现缓慢增长逐步试探带宽瓶颈点。 目前Linux 内核的慢启动阈值默认为：
+#define TCP_INFINITE_SSTHRESH0x7fffffff  </description>
+    </item>
+    
+    <item>
+      <title>从套接字的Pipe Broken异常说起</title>
+      <link>http://www.lovelylich.top/posts/2019-07-06-socket-pipebroken/</link>
+      <pubDate>Sat, 06 Jul 2019 11:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2019-07-06-socket-pipebroken/</guid>
+      <description>引子 公司开发的新功能，要求支持Nginx层非HTTP请求都透传, 但测试部门报告说有偶现的异常，错误是:
+ send() failed (32: Broken pipe)
+ 首先我们需要明确的是: 这种Broken Pipe 在什么情况下触发。这篇文章记录我的探索过程。
+思考 我们知道：TCP连接建立好后，如果没有数据包传输，连接双方并不会做心跳保持连接。所以此时，TCP连接双方都默认对方仍然存活。
+但如果其中一方（比如客户端）发生异常，比如coredump、异常掉电、程序exit(-1)等情况时，在这些情况下，服务器需要等到何时才能知晓该异常呢？
+测试验证 验证coredump情况 测试缓冲区无数据下coredump的情况 为验证coredump，我们需要手工构造异常，我是用除0异常来让程序直接崩溃退出。客户端代码逻辑就是建立连接，接收数据，并且直接coredump。
+代码如下:
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;unistd.h&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;sys/types.h&amp;gt; #include &amp;lt;sys/socket.h&amp;gt; #include &amp;lt;netinet/in.h&amp;gt; #include &amp;lt;netdb.h&amp;gt; void error(const char *msg) { perror(msg); exit(0); } int main(int argc, char *argv[]) { int sockfd, portno, n; struct sockaddr_in serv_addr; struct hostent *server; char buffer[256]; if (argc &amp;lt; 3) { fprintf(stderr,&amp;quot;usage %s hostname port\n&amp;quot;, argv[0]); exit(0); } portno = atoi(argv[2]); sockfd = socket(AF_INET, SOCK_STREAM, 0); if (sockfd &amp;lt; 0) error(&amp;quot;ERROR opening socket&amp;quot;); server = gethostbyname(argv[1]); if (server == NULL) { fprintf(stderr,&amp;quot;ERROR, no such host\n&amp;quot;); exit(0); } bzero((char *) &amp;amp;serv_addr, sizeof(serv_addr)); serv_addr.</description>
+    </item>
+    
+    <item>
+      <title>中国剩余定理</title>
+      <link>http://www.lovelylich.top/posts/2019-07-05-china-remain-theory/</link>
+      <pubDate>Fri, 05 Jul 2019 15:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2019-07-05-china-remain-theory/</guid>
+      <description>1. 简介（内容摘自维基百科） 中国剩余定理给出了以下一元线性同余方程组：
+$$ (S) : \begin{cases} x \equiv a_1 &amp;amp; (\text{mod }m_1) x \equiv a_2 &amp;amp; (\text{mod }m_2) &amp;amp; \vdots x \equiv a_n &amp;amp; (\text{mod }m_n) \end{cases} $$
+有解的判定条件，并用构造法给出了在有解情况下解的具体形式。 中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：
+ 设$M=m_1 \times m_2 \times \ldots \times mn=\displaystyle\prod{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积 设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$ 方程组(S)的通解形式为:  $$ x=a_1t_1M_1+a_2t_2M_2+\ldots+a_nt_nM_n+kM $$
+2. 解释 以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。
+3. 求模的逆元 同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:
+$$ t_iM_i \equiv 1 (\text{mod } m_i) $$ 的$t_i$。
+另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix + m_iy = g$, $g$为$M_i,m_i$的最大公约数。 由于:$M_ix + m_iy = 1$,两边同时取模$m_i$得</description>
+    </item>
+    
+    <item>
+      <title>浅谈TCP的Nagle算法与TCP_CORK</title>
+      <link>http://www.lovelylich.top/posts/2019-03-05-analysis-of-tcp-cork-and-nagle-algorithm/</link>
+      <pubDate>Tue, 05 Mar 2019 12:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2019-03-05-analysis-of-tcp-cork-and-nagle-algorithm/</guid>
+      <description>序言 TCP协议中的这几个概念一般很少遇到，并且也很容易引起混淆，但当真正遇到问题时，这些却又不好排查，因为在抓包结果上并没有特别明显的异常。所以今天我们来详细谈谈这几个问题。
+定义与区别 Nagle算法 首先，Nagle算法提出的背景是在互联网带宽还很小的时候，那时候类似telnet这样的交互型软件存在一个问题：为了交互及时，每当用户输入一个字符时，TCP立即发送一个携带该字符的数据包到服务器，服务器确认该字符并ACK回复，客户端确认服务器的回显。注意在此场景中，网络中充斥大量小包，带宽利用率相当低。
+所以Nagle算法的核心思想是：避免网络中存在大量小包。具体操作是：只要网络中存在未被确认的数据包,并且当前待发送数据包长度小于MSS，则暂停发送，直到应用层继续送数据下来累积达到MSS或者之前未被确认的数据包都被确认掉 等等，这里似乎是需要之前所有数据包都被确认后，才会发新包，这不是把TCP演变成了停等协议了吗？其实不是，Nagle算法只是针对SKB待发送队列中的尾部那个包。只要数据包存在于SKB队列的中间，或者SKB大小满足MSS，则是可以立即发送出去的（窗口允许的情况下）。
+Minshall修正：考虑到Nagle算法是为了避免网络出现大量小包，而对正常达到MSS长度的数据包不应做限制，所以我们不必等到所有数据包都被确认，而是只要网络中所有小包都被确认，无论网络中是否有未被确认的大包，都可以立即继续发送数据 此外，该算法也修正了Nagle算法遇到一次性write 2n个数据包长度的数据时，最后一个包由于不足MSS，无法发送出去，必须等到前面数据包都确认后才能发送的问题。
+配置：可通过在套接字上设置TCP_NODELAY选项，禁用Nagle算法
+TCP_CORK机制 TCP_CORK选项可以认为是Nagle算法的增强，置位后直接阻塞TCP套接字发送数据包，直到取消TCP_CORK标记或者skb大小达到MSS长度。</description>
+    </item>
+    
+    <item>
+      <title>数学角度看支持向量机</title>
+      <link>http://www.lovelylich.top/posts/2018-12-29-math_thesis_of_svm/</link>
+      <pubDate>Sat, 29 Dec 2018 12:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2018-12-29-math_thesis_of_svm/</guid>
+      <description>点到超平面的距离计算 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
+欧式空间中两点之间的距离 在欧几里得空间中，点 p =$(p_1, p_2,\ldots, p_n)$和 q =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
+$$ \begin{aligned} d({\bf{p}},{\bf{q}})&amp;amp;=\sqrt{(p_1-q_1)^2+(p_2-q_2)^2+\cdots+(p_n-qn)^2}
+&amp;amp;=\sqrt{\sum{i=1}^n(p_i-q_i)^2} \end{aligned} $$
+由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
+$$ \lVert{\bf{p}}\rVert=\sqrt{p_1^2+p_2^2+\cdots+p_n^2} $$
+欧式空间中点到超平面的距离 平面的一般方程式为：
+$$ Ax+By+Cz+D=0 $$
+其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点） 所以，对于计算任意点P=(x1, y1,z1)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
+$$ d=\frac {\lvert Ax_1+By_1+Cz_1+D \rvert} {\sqrt{A^2+B^2+C^2}} $$
+支持向量机的训练目标 所以，支持向量机是为了寻找某个超平面 Ax+By+Cz+D=0，使得所有点到该平面的距离最大。
+凸集 引用自维基百科: &amp;gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中
+凸集和非凸集合的几何表现：
+   凸集 非凸集          凸函数定义 引用自维基百科定义: &amp;gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有: $f(tx+(1-t)y) \leq tf(x)+(1-t)f(y)$ 也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。</description>
+    </item>
+    
+  </channel>
+</rss>

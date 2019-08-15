@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on 榕易的易</title>
+    <link>http://www.lovelylich.top/tags/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on 榕易的易</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Jul 2019 15:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.lovelylich.top/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>中国剩余定理</title>
+      <link>http://www.lovelylich.top/posts/2019-07-05-china-remain-theory/</link>
+      <pubDate>Fri, 05 Jul 2019 15:00:00 +0000</pubDate>
+      
+      <guid>http://www.lovelylich.top/posts/2019-07-05-china-remain-theory/</guid>
+      <description>1. 简介（内容摘自维基百科） 中国剩余定理给出了以下一元线性同余方程组：
+$$ (S) : \begin{cases} x \equiv a_1 &amp;amp; (\text{mod }m_1) x \equiv a_2 &amp;amp; (\text{mod }m_2) &amp;amp; \vdots x \equiv a_n &amp;amp; (\text{mod }m_n) \end{cases} $$
+有解的判定条件，并用构造法给出了在有解情况下解的具体形式。 中国剩余定理说明：假设整数$m_1,m_2,\ldots,m_n$两两互质，则对任意的整数：$a_1,a_2,\ldots,a_n$,方程组(S)有解，并且通解可以用如下方式构造得到：
+ 设$M=m_1 \times m_2 \times \ldots \times mn=\displaystyle\prod{i=1}^n m_i$是整数$m_1,m_2,\ldots,m_n$的乘积，并设$M_i=\frac{M}{m_i}$，即$M_i$是除$m_i$之外的n-1个整数的乘积 设$t_i=M_i^{-1}$为$M_i$模$m_i$的数论倒数：$t_iM_i \equiv 1 (\text{mod }m_i)$ 方程组(S)的通解形式为:  $$ x=a_1t_1M_1+a_2t_2M_2+\ldots+a_nt_nM_n+kM $$
+2. 解释 以模$m_1$为例，由于$t_1M_1$模$m_1$等于1，所以$a_1t_1M_1$模$m_1$时即为余$a_1$，另其余项由于$M_i$的存在，都含有因子$m_1$，所以其余项都能被整除，故项$a_1t_1M_1$支撑了方程组(S)中的第一个方程成立，其余类似。故第三步得到的即为方程组的通解。
+3. 求模的逆元 同样，以$m_1$为例，为寻找$M_i$模$m_i$的模逆元，即寻找满足:
+$$ t_iM_i \equiv 1 (\text{mod } m_i) $$ 的$t_i$。
+另一方面，设exgcd($M_i, m_i$)为扩展欧几里算法的函数，则可得$M_ix + m_iy = g$, $g$为$M_i,m_i$的最大公约数。 由于:$M_ix + m_iy = 1$,两边同时取模$m_i$得</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>榕易的易 </title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.56.3" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+      <link href="http://www.lovelylich.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="alternate" type="application/rss+xml" title="榕易的易" />
+      <link href="http://www.lovelylich.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="feed" type="application/rss+xml" title="榕易的易" />
+    
+
+    <meta property="og:title" content="机器学习" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://www.lovelylich.top/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" />
+
+<meta property="og:updated_time" content="2018-12-29T12:00:00+00:00" />
+<meta itemprop="name" content="机器学习">
+<meta itemprop="description" content="">
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="机器学习"/>
+<meta name="twitter:description" content=""/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+
+  <header>
+    <div class="pb3-m pb6-l bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://www.lovelylich.top/" class="f3 fw2 hover-white no-underline white-90 dib">
+      榕易的易
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+      <div class="tc-l pv3 ph3 ph4-ns">
+        <h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">
+          机器学习
+        </h1>
+        
+      </div>
+    </div>
+  </header>
+
+
+    <main class="pb7" role="main">
+      
+  <article class="cf pa3 pa4-m pa4-l">
+    <div class="measure-wide-l center f4 lh-copy nested-copy-line-height nested-links nested-img mid-gray">
+      <p>Below you will find pages that utilize the taxonomy term “机器学习”</p>
+    </div>
+  </article>
+  <div class="mw8 center">    
+    <section class="flex-ns flex-wrap justify-around mt5">
+      
+        <div class="relative w-100  mb4 bg-white">
+          <div class="relative w-100 mb4 bg-white nested-copy-line-height">
+  <div class="bg-white mb3 pa4 gray overflow-hidden">
+    <span class="f6 db">Posts</span>
+    <h1 class="f3 near-black">
+      <a href="/posts/2018-12-29-math_thesis_of_svm/" class="link black dim">
+        数学角度看支持向量机
+      </a>
+    </h1>
+    <div class="nested-links f5 lh-copy nested-copy-line-height">
+      点到超平面的距离计算 SVM是基于超平面来分类，核心目标是寻找某个超平面，被分类的所有点，到该超平面的距离最大。
+欧式空间中两点之间的距离 在欧几里得空间中，点 p =$(p_1, p_2,\ldots, p_n)$和 q =$(q_1, q_2,\ldots,q_n)$之间的欧氏距离为:
+$$ \begin{aligned} d({\bf{p}},{\bf{q}})&amp;=\sqrt{(p_1-q_1)^2+(p_2-q_2)^2+\cdots+(p_n-qn)^2}
+&amp;=\sqrt{\sum{i=1}^n(p_i-q_i)^2} \end{aligned} $$
+由该定理可知，欧式空间中的点，都对应着一个从原点出发，终止于该点的向量，而该向量的长度即为该点到原点到距离：
+$$ \lVert{\bf{p}}\rVert=\sqrt{p_1^2+p_2^2+\cdots+p_n^2} $$
+欧式空间中点到超平面的距离 平面的一般方程式为：
+$$ Ax+By+Cz+D=0 $$
+其中n = (A, B, C)是平面的法向量，D是将平面平移到坐标原点所需距离（所以D=0时，平面过原点） 所以，对于计算任意点P=(x1, y1,z1)到该超平面的距离，其实是计算该点投影到法向量(A, B, C)上的值:
+$$ d=\frac {\lvert Ax_1+By_1+Cz_1+D \rvert} {\sqrt{A^2+B^2+C^2}} $$
+支持向量机的训练目标 所以，支持向量机是为了寻找某个超平面 Ax+By+Cz+D=0，使得所有点到该平面的距离最大。
+凸集 引用自维基百科: &gt;在点集拓扑学与欧几里得空间中，凸集（convex set）是一个点集合，其中每两点之间的直线点都落在该点集合中
+凸集和非凸集合的几何表现：
+   凸集 非凸集          凸函数定义 引用自维基百科定义: &gt;凸函数是一个定义在某个向量空间的凸子集C（区间）上的实值函数，如果在其定义域C 上的任意两点x,y，以及$t \in [0,1]$，有: $f(tx+(1-t)y) \leq tf(x)+(1-t)f(y)$ 也就是说，一个函数是凸的当且仅当其上境图（在函数图像上方的点集）为一个凸集。
+    </div>
+  </div>
+</div>
+
+        </div>
+      
+    </section>
+  </div>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://www.lovelylich.top/" >
+    &copy; 2019 榕易的易
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>
